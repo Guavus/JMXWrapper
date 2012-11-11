@@ -1,0 +1,74 @@
+JMXWrapper is a wrapper that allows creation of JMX dynamic MBeans by simply
+annotating a Java class. See the JavaDoc for more information.
+
+The software was created and tested using Java 1.6.0.
+
+The software is licensed under the MIT license (see LICENSE).
+
+Author: Udo Klimaschewski
+        http://about.me/udo.klimaschewski
+    or  http://UdoJava.com
+
+===============================================================================
+
+From the JavaDoc:
+
+This is a wrapper class that wraps a normal Java object into a JMX dynamic bean
+by using Java annotations.
+It supports free naming and description of the bean, bean attributes, operations
+and operation parameters.
+Names and descriptions can also be loaded through a Java ResourceBundle.
+This allows localization of names and descriptions at bean creation time.
+
+To create a dynamic JMX bean, simply annotate your normal Java class and pass an
+instance of it to the constructor.
+This wrapper class will act as a proxy between the JMX system and your logic.
+Simply register the wrapped bean with JMX and you can access it through JCOnsole,
+JVisualVM and other JMX clients.
+
+Four annotation types are used to describe the bean: 
+
+JMXBean          : Marks and describes a class to be used as a dynamic JMX bean. 
+JMXBeanAttribute : Marks and describes methods (setter/getter) in a JMXBean to be
+                   used as a JMX attribute. 
+JMXBeanOperation : Marks and describes a method to be used as a JMX operation. 
+JMXBeanParameter : Describes a method parameter for JMX operation parameters 
+
+Here is an example of an annotated class: 
+
+ @JMXBean(description = "My first JMX bean test")
+ public class MyBean {
+ 	int level = 0;
+ 
+ 	@JMXBeanAttribute(name = "Floor Level", description = "The current floor level")
+ 	public int getLevel() {
+ 		return level;
+ 	}
+ 
+ 	@JMXBeanAttribute
+ 	public void setLevel(int newLevel) {
+ 		level = newLevel;
+ 	}
+ 
+ 	@JMXBeanOperation(name = "Echo Test", description = "Echoes the parameter back to you")
+ 	public String myMethod(
+ 			@JMXBeanParameter(name = "Input", description = "String of what to echo") String param) {
+ 		return "You said " + param;
+ 	}
+ }
+ 
+
+How to use resource bundles for bean description.
+
+To use a resource bundle, the resource bundles name has to be specified
+in the bean annotation. In that case, the nameKey and descriptionKey
+annotation attributes will be used to search the bundle for the keys specified therein.
+The current default locale will be used to find localized versions of names and descriptions.
+If no entry is found in the bundle(s), the default names and descriptions will be used: 
+
+@JMXBean(resourceBundleName="com.example.my.package.BundleName")
+        public class MyBean {
+           int level = 0;@JMXBeanAttribute(nameKey="level", descriptionKey="levelDescription")
+           public int getLevel() {
+               return level;
+           }
