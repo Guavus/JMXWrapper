@@ -27,6 +27,7 @@
 package com.udojava.jmx.wrapper;
 
 import java.lang.annotation.Annotation;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ import javax.management.MBeanException;
 import javax.management.MBeanInfo;
 import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
+import javax.management.MBeanServer;
 import javax.management.ReflectionException;
 
 /**
@@ -98,7 +100,7 @@ import javax.management.ReflectionException;
  * </pre>
  * 
  * <br>
- * <em><strong>How to use resource bundles for bean description.</strong></em><br>
+ * <em><strong>How to use resource bundles for bean description:</strong></em><br>
  * <br>
  * To use a resource bundle, the resource bundles name has to be specified in
  * the bean annotation. In that case, the <code>nameKey</code> and
@@ -116,6 +118,17 @@ import javax.management.ReflectionException;
  *           public int getLevel() {
  *               return level;
  *           }
+ * </pre>
+ * 
+ * <br>
+ * <em><strong>How to use:</strong></em><br>
+ * <br>
+ * 
+ * <pre>
+ * MyBean bean = new MyBean();
+ * JMXBeanWrapper wrappedBean = new JMXBeanWrapper(bean);
+ * MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+ * mbs.registerMBean(wrappedBean, new Objectname(com.example.my.package:type=TestBean,name=My Bean));
  * </pre>
  * 
  * @author Udo Klimaschewski
