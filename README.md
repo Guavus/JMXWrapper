@@ -75,7 +75,9 @@ You can check it out directly to an Eclipse project, the necessary files are in 
 ### Author and License
 
 Copyright 2012 by Udo Klimaschewski
+
 http://about.me/udo.klimaschewski
+
 http://UdoJava.com
 
 The software is licensed under the MIT Open Source license (see LICENSE file).
