@@ -1,5 +1,5 @@
 JMXWrapper
-==========
+===
 
 ### Introduction
 
@@ -30,13 +30,13 @@ Names and descriptions of JMX beans, attributes, operations and operation parame
  	}
  }
 ````
-Now you can use the **JMXWrapper** to publish a bean including the annotated Informations to the JMX Server:
+Now you can use the **JMXWrapper** to publish a bean including the annotated informations to the JMX Server:
 
 ````java 
 MyBean bean = new MyBean();
 JMXBeanWrapper wrappedBean = new JMXBeanWrapper(bean);
 MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-mbs.registerMBean(wrappedBean, new Objectname(com.example.my.package:type=TestBean,name=My Bean));
+mbs.registerMBean(wrappedBean, new Objectname("com.example.my.package:type=TestBean,name=My Bean"));
 ````
 **That's all!**
 
@@ -75,10 +75,8 @@ You can check it out directly to an Eclipse project, the necessary files are in 
 ### Author and License
 
 Copyright 2012 by Udo Klimaschewski
+- [about.me](http://about.me/udo.klimaschewski)
+- [UdoJava.com](http://UdoJava.com)
 
-http://about.me/udo.klimaschewski
-
-http://UdoJava.com
-
-The software is licensed under the MIT Open Source license (see LICENSE file).
+The software is licensed under the MIT Open Source license (see [LICENSE](https://github.com/uklimaschewski/JMXWrapper/blob/master/LICENSE) file).
 
