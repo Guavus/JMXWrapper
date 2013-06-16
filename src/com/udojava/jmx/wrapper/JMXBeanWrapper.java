@@ -344,6 +344,10 @@ public class JMXBeanWrapper implements DynamicMBean {
 	 *         <code>false</code> otherwise.
 	 */
 	private boolean signatureMatches(String[] signature, Method method) {
+	    if (signature != null && method.getParameterTypes().length != signature.length) {
+	        return false;
+	    }
+	    
 		int i = 0;
 		for (Class<?> clazz : method.getParameterTypes()) {
 			if (!clazz.getName().equals(signature[i++]))
