@@ -2,6 +2,9 @@ package com.udojava.jmx.wrapper;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import javax.management.IntrospectionException;
 import javax.management.MBeanOperationInfo;
 
@@ -93,10 +96,21 @@ public class BeanAnnotationTest {
 		}
 	}
 	
+	private MBeanOperationInfo getOperationInfo(JMXBeanWrapper bean, int operationNumber) {
+		MBeanOperationInfo[] infos = bean.getMBeanInfo().getOperations();
+		Arrays.sort(infos, new Comparator<MBeanOperationInfo>() {
+			@Override
+			public int compare(MBeanOperationInfo o1, MBeanOperationInfo o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		return infos[operationNumber];
+	}
+	
 	@Test
 	public void testParseSpecial() throws IntrospectionException, SecurityException {
 		JMXBeanWrapper bean = new JMXBeanWrapper(new ParseSpecial());
-		MBeanOperationInfo info = bean.getMBeanInfo().getOperations()[0];
+		MBeanOperationInfo info = getOperationInfo(bean, 0);
 		assertEquals("param1", info.getSignature()[0].getName());
 		assertEquals("param2", info.getSignature()[1].getName());
 		assertEquals("P-3", info.getSignature()[2].getName());
@@ -159,18 +173,18 @@ public class BeanAnnotationTest {
 		JMXBeanWrapper bean = new JMXBeanWrapper(new TestBeanDefaults());
 
 		assertEquals("voidMethod",
-				bean.getMBeanInfo().getOperations()[0].getName());
+				getOperationInfo(bean, 1).getName());
 		assertEquals("",
-				bean.getMBeanInfo().getOperations()[0].getDescription());
+				getOperationInfo(bean, 1).getDescription());
 		assertEquals("void",
-				bean.getMBeanInfo().getOperations()[0].getReturnType());
+				getOperationInfo(bean, 1).getReturnType());
 		assertEquals(0,
-				bean.getMBeanInfo().getOperations()[0].getSignature().length);
+				getOperationInfo(bean, 1).getSignature().length);
 		assertEquals(MBeanOperationInfo.UNKNOWN,
-				bean.getMBeanInfo().getOperations()[0].getImpact());
+				getOperationInfo(bean, 1).getImpact());
 		
 
-		MBeanOperationInfo info = bean.getMBeanInfo().getOperations()[1];
+		MBeanOperationInfo info = getOperationInfo(bean, 0);
 		assertEquals("complexMethod", info.getName());
 		assertEquals("java.lang.String", info.getReturnType());
 		assertEquals(2, info.getSignature().length);
@@ -189,13 +203,12 @@ public class BeanAnnotationTest {
 		JMXBeanWrapper bean = new JMXBeanWrapper(new TestBeanFullyDescribed());
 
 		assertEquals("The void method",
-				bean.getMBeanInfo().getOperations()[0].getName());
-		assertEquals("The void method description", bean.getMBeanInfo()
-				.getOperations()[0].getDescription());
+				getOperationInfo(bean, 1).getName());
+		assertEquals("The void method description", getOperationInfo(bean, 1).getDescription());
 		assertEquals(MBeanOperationInfo.INFO,
-				bean.getMBeanInfo().getOperations()[0].getImpact());
+				getOperationInfo(bean, 1).getImpact());
 
-		MBeanOperationInfo info = bean.getMBeanInfo().getOperations()[1];
+		MBeanOperationInfo info = getOperationInfo(bean, 0);
 		assertEquals(2, info.getSignature().length);
 		assertEquals("The name", info.getSignature()[0].getName());
 		assertEquals("The name description", info.getSignature()[0].getDescription());
