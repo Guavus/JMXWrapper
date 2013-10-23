@@ -36,7 +36,7 @@ Now you can use the **JMXWrapper** to publish a bean including the annotated inf
 MyBean bean = new MyBean();
 JMXBeanWrapper wrappedBean = new JMXBeanWrapper(bean);
 MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-mbs.registerMBean(wrappedBean, new Objectname("com.example.my.package:type=TestBean,name=My Bean"));
+mbs.registerMBean(wrappedBean, new ObjectName("com.example.my.package:type=TestBean,name=My Bean"));
 ````
 **That's all!**
 
