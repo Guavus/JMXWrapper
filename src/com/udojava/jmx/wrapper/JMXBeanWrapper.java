@@ -28,6 +28,7 @@ package com.udojava.jmx.wrapper;
 
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -367,13 +368,19 @@ public class JMXBeanWrapper implements DynamicMBean {
 							&& signatureMatches(signature, method))
 						return method.invoke(bean, params);
 				}
-			} catch (Exception ex) {
-				throw new ReflectionException(ex,
-						"Can't convert signature for operation " + actionName);
+			} catch (InvocationTargetException ex) {
+				if ((ex.getCause() != null) && (ex.getCause() instanceof Exception)) {
+					throw new MBeanException((Exception) ex.getCause());
+				} else {
+					throw new MBeanException(new Exception(ex.getMessage()));
+				}
+
+			} catch (Exception ex2) {
+				throw new MBeanException(ex2);
 			}
 		}
-		throw new MBeanException(new IllegalArgumentException(
-				"Operation not found: " + actionName + "(" + signature + ")"));
+		throw new ReflectionException(new Exception(
+			"Operation not found: " + actionName + "(" + signature + ")"));
 	}
 
 	@Override
